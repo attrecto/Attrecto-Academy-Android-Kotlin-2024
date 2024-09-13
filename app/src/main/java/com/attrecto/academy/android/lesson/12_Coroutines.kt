@@ -1,7 +1,8 @@
 package com.attrecto.academy.android.lesson
 
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 /*
@@ -40,15 +41,14 @@ fun main() {
         println("$user = $mother x $father")
         // Remek, de hol volt itt a párhozamosítás?! Sehol :-D
 
-        launch {
-            val user = load("getUser")
-            val mother = load("getMother($user)")
-            val father = load("getFather($user)")
-            println("$user = $mother x $father")
-        }
+        val motherDeferred = async { load("getMother($user)") }
+        val fatherDeferred = async { load("getFather($user)") }
+
+        val result = listOf(motherDeferred, fatherDeferred).awaitAll()
+        println("$user = ${result[0]} x ${result[1]}")
 
         // Hogy megvárjuk a végét
-        delay(4000)
+        //delay(4000)
         println("Itt a vége")
     }
 }

@@ -35,7 +35,7 @@ fun main() {
         // A stateFlow csak az utolsó állapotát őrzi meg
         val stateFlow = MutableStateFlow(5)
         stateFlow.update { 10 }
-        launch {
+        val job = launch {
             stateFlow.collect {
                 println(it)
             }
@@ -44,5 +44,6 @@ fun main() {
         stateFlow.update { 15 }
         delay(1000)
         println("Most vége vége")
+        job.cancel()
     }
 }
